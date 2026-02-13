@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import RouteRedirect from '../../components/RouteRedirect.astro';
+
+interface Props {
+	to: string;
+	title: string;
+}
+
+export async function getStaticPaths() {
+	const work = await getCollection('work');
+	return work.map((entry) => ({
+		params: { slug: entry.slug },
+		props: {
+			to: `../../work/${entry.slug}/`,
+			title: `Redirecting: ${entry.data.title}`,
+		},
+	}));
+}
+
+const { to, title } = Astro.props as Props;
+---
+
+<RouteRedirect to={to} title={title} description="This portfolio URL now maps to /work." />

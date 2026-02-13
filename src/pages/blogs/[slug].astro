@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import RouteRedirect from '../../components/RouteRedirect.astro';
+
+interface Props {
+	to: string;
+	title: string;
+}
+
+export async function getStaticPaths() {
+	const blog = await getCollection('blog', ({ data }) => !data.draft);
+	return blog.map((entry) => ({
+		params: { slug: entry.slug },
+		props: {
+			to: `../../blog/${entry.slug}/`,
+			title: `Redirecting: ${entry.data.title}`,
+		},
+	}));
+}
+
+const { to, title } = Astro.props as Props;
+---
+
+<RouteRedirect to={to} title={title} description="This blog URL now maps to /blog." />

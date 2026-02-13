@@ -55,6 +55,23 @@
 - Build static site artifact.
 - Deploy to GitHub Pages via Actions workflow.
 
+## Route Plan (Current)
+
+- Canonical routes:
+  - `/`
+  - `/work` and `/work/[slug]`
+  - `/blog` and `/blog/[slug]`
+  - `/about`
+  - `/contact`
+- Redirect aliases (minimum content pages):
+  - `/portfolio` -> `/work`
+  - `/portfolio/[slug]` -> `/work/[slug]`
+  - `/projects` -> `/work`
+  - `/blogs` -> `/blog`
+  - `/blogs/[slug]` -> `/blog/[slug]`
+  - `/posts` -> `/blog`
+  - `/home` -> `/`
+
 ## GitHub Authentication Sequence
 
 1. Build project and commit locally first.

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface Props {
+	to: string;
+	title?: string;
+	description?: string;
+}
+
+const {
+	to,
+	title = 'Redirecting...',
+	description = 'This route moved to a new URL.',
+} = Astro.props as Props;
+---
+
+<BaseLayout title={title} description={description}>
+	<section class="section prose">
+		<h1>{title}</h1>
+		<p>{description}</p>
+		<p>
+			If you are not redirected automatically,
+			<a href={to}>open the target page</a>.
+		</p>
+	</section>
+
+	<script is:inline define:vars={{ to }}>
+		const target = new URL(to, window.location.href);
+		if (window.location.search) target.search = window.location.search;
+		if (window.location.hash) target.hash = window.location.hash;
+		window.location.replace(target.toString());
+	</script>
+</BaseLayout>

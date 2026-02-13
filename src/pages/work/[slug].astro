@@ -1,0 +1,61 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../utils/content';
+
+interface Props {
+	entry: CollectionEntry<'work'>;
+}
+
+export async function getStaticPaths() {
+	const work = await getCollection('work');
+	return work.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={`${entry.data.title} | Portfolio`} description={entry.data.excerpt}>
+	<article class="section prose">
+		<p class="muted">Published {formatDate(entry.data.publishedAt)} · {entry.data.role}</p>
+		<h1>{entry.data.title}</h1>
+		<p>{entry.data.excerpt}</p>
+		<div class="meta-row">
+			{entry.data.tags.map((tag) => (
+				<span class="pill">{tag}</span>
+			))}
+			{entry.data.tech.map((item) => (
+				<span class="pill">{item}</span>
+			))}
+		</div>
+		{entry.data.gallery.length > 0 && (
+			<div class="section">
+				{entry.data.gallery.map((image) => (
+					<img src={image} alt={`${entry.data.title} gallery image`} loading="lazy" />
+				))}
+			</div>
+		)}
+		{entry.data.links && (
+			<div class="section">
+				<h2>Project Links</h2>
+				<ul>
+					{entry.data.links.live && (
+						<li>
+							<a href={entry.data.links.live} target="_blank" rel="noreferrer">Live Site</a>
+						</li>
+					)}
+					{entry.data.links.github && (
+						<li>
+							<a href={entry.data.links.github} target="_blank" rel="noreferrer">GitHub</a>
+						</li>
+					)}
+				</ul>
+			</div>
+		)}
+		<Content />
+	</article>
+</BaseLayout>

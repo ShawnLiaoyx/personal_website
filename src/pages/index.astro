@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { byPublishedDateDesc, formatDate } from '../utils/content';
+
+const [work, blog] = await Promise.all([
+	getCollection('work'),
+	getCollection('blog', ({ data }) => !data.draft),
+]);
+
+const featuredWork = work
+	.filter((entry) => entry.data.featured)
+	.sort(byPublishedDateDesc)
+	.slice(0, 3);
+
+const featuredBlogs = blog
+	.filter((entry) => entry.data.featured)
+	.sort(byPublishedDateDesc)
+	.slice(0, 3);
+---
+
+<BaseLayout
+	title="Yuxuan Liao | Portfolio & Blog"
+	description="Portfolio projects and writing by Yuxuan Liao."
+>
+	<section class="hero fade-in">
+		<div>
+			<h1>Building digital products with clear structure and expressive design.</h1>
+			<p>
+				I am Yuxuan, a product-focused engineer who designs portfolio systems, content workflows,
+				and polished web interfaces. This site highlights selected work and field notes from my
+				build process.
+			</p>
+			<div class="hero-actions">
+				<a class="button button-primary" href="/work">Explore Portfolio</a>
+				<a class="button button-subtle" href="/blog">Read Blogs</a>
+				<a class="button button-subtle" href="/contact">Get in touch</a>
+			</div>
+		</div>
+		<div class="hero-side">
+			<dl class="hero-metric-grid">
+				<div class="hero-metric">
+					<dt>Projects</dt>
+					<dd>{work.length}</dd>
+				</div>
+				<div class="hero-metric">
+					<dt>Articles</dt>
+					<dd>{blog.length}</dd>
+				</div>
+				<div class="hero-metric">
+					<dt>Focus</dt>
+					<dd>Product Web</dd>
+				</div>
+				<div class="hero-metric">
+					<dt>Stack</dt>
+					<dd>Astro + TS</dd>
+				</div>
+			</dl>
+		</div>
+	</section>
+
+	<section class="section fade-in" data-delay="1">
+		<header class="section-header">
+			<h2>Portfolio Highlights</h2>
+			<a href="/work">View all projects</a>
+		</header>
+		<div class="card-grid">
+			{featuredWork.map((entry) => (
+				<article class="card">
+					<div class="card-visual" style={`background-image:url('${entry.data.cover}')`}></div>
+					<div class="card-body">
+						<h3><a href={`/work/${entry.slug}/`}>{entry.data.title}</a></h3>
+						<p>{entry.data.excerpt}</p>
+						<div class="meta-row">
+							<span class="muted">{entry.data.year}</span>
+							{entry.data.tags.slice(0, 2).map((tag) => (
+								<span class="pill">{tag}</span>
+							))}
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="section fade-in" data-delay="2">
+		<header class="section-header">
+			<h2>Latest Blog Highlights</h2>
+			<a href="/blog">View all blogs</a>
+		</header>
+		<div class="card-grid">
+			{featuredBlogs.map((entry) => (
+				<article class="card">
+					<div
+						class="card-visual"
+						style={`background-image:url('${entry.data.cover ?? '/images/blog-notes.svg'}')`}
+					></div>
+					<div class="card-body">
+						<h3><a href={`/blog/${entry.slug}/`}>{entry.data.title}</a></h3>
+						<p>{entry.data.excerpt}</p>
+						<div class="meta-row">
+							<span class="muted">{formatDate(entry.data.publishedAt)}</span>
+							<span class="pill">{entry.data.category}</span>
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+	</section>
+</BaseLayout>

@@ -1,0 +1,28 @@
+---
+title: Designing Filter Systems That Scale
+excerpt: Practical patterns for making filter-heavy interfaces understandable and fast.
+publishedAt: 2025-08-17
+updatedAt: 2025-08-19
+category: UX Engineering
+tags:
+  - filters
+  - ux
+  - performance
+featured: true
+draft: false
+cover: /images/blog-workflow.svg
+---
+
+Good filtering systems avoid two common traps: hidden state and unclear scope.
+
+## Rule 1: Keep URL state explicit
+
+If users can share a filtered result, the URL should reflect it. This also makes QA easier.
+
+## Rule 2: Prioritize the first decision
+
+Give one obvious path first, then advanced controls. People often leave when the filter panel looks like a form builder.
+
+## Rule 3: Count results early
+
+Small details like visible result counts significantly improve trust.

@@ -1,0 +1,32 @@
+<svg width="960" height="640" viewBox="0 0 960 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="960" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD8AA"/>
+      <stop offset="1" stop-color="#EFA86C"/>
+    </linearGradient>
+    <linearGradient id="card1" x1="0" y1="0" x2="220" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B4442D"/>
+      <stop offset="1" stop-color="#F37A3A"/>
+    </linearGradient>
+    <linearGradient id="card2" x1="0" y1="0" x2="220" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2A5B5F"/>
+      <stop offset="1" stop-color="#64B9B2"/>
+    </linearGradient>
+    <linearGradient id="card3" x1="0" y1="0" x2="220" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4C3B71"/>
+      <stop offset="1" stop-color="#9D77D9"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="640" rx="30" fill="url(#bg)"/>
+  <g opacity="0.2" stroke="#6A301F" stroke-width="2">
+    <path d="M40 560C200 500 280 460 450 510C620 560 710 545 920 470"/>
+    <path d="M30 520C220 420 380 390 540 430C700 470 790 460 940 410"/>
+    <path d="M50 490C220 360 430 320 620 340C790 360 830 350 930 310"/>
+  </g>
+  <rect x="70" y="90" width="250" height="170" rx="20" fill="url(#card1)"/>
+  <rect x="355" y="180" width="250" height="170" rx="20" fill="url(#card2)"/>
+  <rect x="640" y="100" width="250" height="170" rx="20" fill="url(#card3)"/>
+  <rect x="120" y="315" width="170" height="110" rx="14" fill="#FFF1DF" fill-opacity="0.9"/>
+  <rect x="360" y="390" width="170" height="110" rx="14" fill="#FFF1DF" fill-opacity="0.9"/>
+  <rect x="680" y="330" width="170" height="110" rx="14" fill="#FFF1DF" fill-opacity="0.9"/>
+</svg>

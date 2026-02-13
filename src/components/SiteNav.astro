@@ -1,0 +1,18 @@
+---
+const links = [
+	{ href: '/', label: 'Home' },
+	{ href: '/work', label: 'Portfolio' },
+	{ href: '/blog', label: 'Blog' },
+	{ href: '/about', label: 'About' },
+	{ href: '/contact', label: 'Contact' },
+];
+---
+
+<nav class="site-nav">
+	<a class="brand" href="/">Yuxuan Liao</a>
+	<div class="nav-links" aria-label="Primary navigation">
+		{links.map((link) => (
+			<a class="nav-link" href={link.href}>{link.label}</a>
+		))}
+	</div>
+</nav>

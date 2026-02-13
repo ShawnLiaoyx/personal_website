@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { byPublishedDateDesc, uniqueValues } from '../../utils/content';
+
+const work = (await getCollection('work')).sort(byPublishedDateDesc);
+const tags = uniqueValues(work.flatMap((entry) => entry.data.tags));
+const years = uniqueValues(work.map((entry) => String(entry.data.year)));
+---
+
+<BaseLayout title="Portfolio | Yuxuan Liao" description="Selected projects with filtering by tag and year.">
+	<section class="section">
+		<header class="section-header">
+			<h1>Portfolio</h1>
+			<p>Filter projects by tag, year, and keyword.</p>
+		</header>
+		<div class="filter-panel" id="work-filters">
+			<label>
+				<span class="muted">Keyword</span>
+				<input type="search" name="q" placeholder="Search project title" />
+			</label>
+			<label>
+				<span class="muted">Tag</span>
+				<select name="tag">
+					<option value="">All tags</option>
+					{tags.map((tag) => (
+						<option value={tag}>{tag}</option>
+					))}
+				</select>
+			</label>
+			<label>
+				<span class="muted">Year</span>
+				<select name="year">
+					<option value="">All years</option>
+					{years.map((year) => (
+						<option value={year}>{year}</option>
+					))}
+				</select>
+			</label>
+		</div>
+
+		<div class="card-grid" id="work-grid">
+			{work.map((entry) => (
+				<article
+					class="card work-card"
+					data-title={entry.data.title.toLowerCase()}
+					data-year={entry.data.year}
+					data-tags={entry.data.tags.join(',').toLowerCase()}
+				>
+					<div class="card-visual" style={`background-image:url('${entry.data.cover}')`}></div>
+					<div class="card-body">
+						<h3><a href={`/work/${entry.slug}/`}>{entry.data.title}</a></h3>
+						<p>{entry.data.excerpt}</p>
+						<div class="meta-row">
+							<span class="muted">{entry.data.year}</span>
+							{entry.data.tags.map((tag) => (
+								<span class="pill">{tag}</span>
+							))}
+						</div>
+					</div>
+				</article>
+			))}
+		</div>
+		<p class="empty-state" id="work-empty" hidden>No projects match these filters yet.</p>
+	</section>
+
+	<script>
+		const filterRoot = document.getElementById('work-filters');
+		const cards = Array.from(document.querySelectorAll<HTMLElement>('.work-card'));
+		const empty = document.getElementById('work-empty');
+		if (filterRoot && empty) {
+			const queryInput = filterRoot.querySelector<HTMLInputElement>('input[name="q"]');
+			const tagSelect = filterRoot.querySelector<HTMLSelectElement>('select[name="tag"]');
+			const yearSelect = filterRoot.querySelector<HTMLSelectElement>('select[name="year"]');
+
+			const params = new URLSearchParams(window.location.search);
+			if (queryInput && params.get('q')) queryInput.value = params.get('q') || '';
+			if (tagSelect && params.get('tag')) tagSelect.value = params.get('tag') || '';
+			if (yearSelect && params.get('year')) yearSelect.value = params.get('year') || '';
+
+			const applyFilters = () => {
+				const query = queryInput?.value.trim().toLowerCase() || '';
+				const tag = tagSelect?.value.trim().toLowerCase() || '';
+				const year = yearSelect?.value.trim() || '';
+
+				let visibleCount = 0;
+				for (const card of cards) {
+					const matchesQuery = query ? card.dataset.title?.includes(query) : true;
+					const matchesTag = tag ? card.dataset.tags?.split(',').includes(tag) : true;
+					const matchesYear = year ? card.dataset.year === year : true;
+					const matches = Boolean(matchesQuery && matchesTag && matchesYear);
+					card.style.display = matches ? '' : 'none';
+					if (matches) visibleCount += 1;
+				}
+
+				empty.hidden = visibleCount !== 0;
+
+				const next = new URLSearchParams();
+				if (query) next.set('q', query);
+				if (tag) next.set('tag', tag);
+				if (year) next.set('year', year);
+				const queryString = next.toString();
+				const nextUrl = queryString
+					? `${window.location.pathname}?${queryString}`
+					: window.location.pathname;
+				window.history.replaceState({}, '', nextUrl);
+			};
+
+			for (const control of [queryInput, tagSelect, yearSelect]) {
+				control?.addEventListener('input', applyFilters);
+				control?.addEventListener('change', applyFilters);
+			}
+			applyFilters();
+		}
+	</script>
+</BaseLayout>

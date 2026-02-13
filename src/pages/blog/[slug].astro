@@ -1,0 +1,38 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../utils/content';
+
+interface Props {
+	entry: CollectionEntry<'blog'>;
+}
+
+export async function getStaticPaths() {
+	const blog = await getCollection('blog', ({ data }) => !data.draft);
+	return blog.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props as Props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout title={`${entry.data.title} | Blog`} description={entry.data.excerpt}>
+	<article class="section prose">
+		<p class="muted">
+			Published {formatDate(entry.data.publishedAt)} · {entry.data.category}
+			{entry.data.updatedAt ? ` · Updated ${formatDate(entry.data.updatedAt)}` : ''}
+		</p>
+		<h1>{entry.data.title}</h1>
+		<p>{entry.data.excerpt}</p>
+		<div class="meta-row">
+			{entry.data.tags.map((tag) => (
+				<span class="pill">{tag}</span>
+			))}
+		</div>
+		{entry.data.cover && <img src={entry.data.cover} alt={`${entry.data.title} cover`} loading="lazy" />}
+		<Content />
+	</article>
+</BaseLayout>

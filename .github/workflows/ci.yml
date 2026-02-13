@@ -5,9 +5,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   validate:
+    name: Validate code quality and buildability
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,6 +20,16 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+
+      - name: Learning log - CI pipeline overview
+        run: |
+          {
+            echo "## CI: What this run does"
+            echo "- Trigger: pull request, push to \`main\`, or manual run."
+            echo "- Goal: fail early if code, types, tests, or build are broken."
+            echo "- Sequence: install dependencies -> type/content checks -> unit tests -> production build."
+            echo "- Why \`npm ci\`: reproducible install from \`package-lock.json\`."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install dependencies
         run: npm ci

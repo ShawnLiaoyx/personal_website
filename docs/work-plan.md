@@ -13,7 +13,7 @@
 - Framework: Astro + strict TypeScript.
 - Content: Markdown/MDX with Astro content collections (typed schemas).
 - Runtime: static output, no persistent application server required.
-- Optional editor UI later: Decap CMS at `/admin`.
+- Editor strategy: Git-based Markdown/MDX editing (Decap CMS deferred).
 
 ## Dependency Isolation Policy
 
@@ -32,7 +32,7 @@
 4. Listing pages with URL-synced filter controls.
 5. Detail pages for works/posts.
 6. CI + GitHub Pages deployment automation.
-7. Content editing workflow polish (templates, optional CMS).
+7. Content editing workflow polish (templates; no `/admin` CMS for now).
 
 ## Version Control Plan
 
